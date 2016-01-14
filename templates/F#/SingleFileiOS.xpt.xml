@@ -9,7 +9,7 @@
         <Image id="md-ios-empty-project"/>
         <LanguageName>F#</LanguageName>
           <DefaultParameters>MinimumOSVersion=8.0, ShowTestCloudOption=false</DefaultParameters>
-        <_Description><![CDATA[WTF.]]></_Description>
+        <_Description><![CDATA[Single File Xamarin.iOS app. UI created in code.]]></_Description>
     </TemplateConfiguration>
 
   <!-- Actions -->
@@ -28,15 +28,15 @@
 			<Reference type="Gac" refto="System, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" />
 				<Reference type="Gac" refto="System.Xml, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" />
 				<Reference type="Gac" refto="System.Core, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" />
-				<Reference type="Gac" refto="monotouch" />
+				<Reference type="Gac" refto="Xamarin.iOS" />
 	      </References>
       <Files>
         <File name = "Program.fs" AddStandardHeader="True"><![CDATA[
 namespace Simple
  
 open System
-open MonoTouch.UIKit
-open MonoTouch.Foundation
+open UIKit
+open Foundation
 open System.Drawing
  
 type ContentView ( color : UIColor ) as self = 

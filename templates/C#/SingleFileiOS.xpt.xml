@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<Template Created="07/29/2013" LastModified="07/29/2013">
+  <!-- Template Header -->
+  <TemplateConfiguration>
+    <_Name>C# Single File</_Name>
+    <_Category>ios/app/general</_Category>
+    <Icon>md-project-iphone</Icon>
+    <Image id="md-ios-empty-project"/>
+    <LanguageName>C#</LanguageName>
+    <DefaultParameters>MinimumOSVersion=8.0, ShowTestCloudOption=false</DefaultParameters>
+    <_Description><![CDATA[Single File Xamarin.iOS app. UI created in code.]]></_Description>
+  </TemplateConfiguration>
+  <!-- Actions -->
+  <Actions>
+    <Open filename="Program.cs"/>
+  </Actions>
+  <!-- Template Content -->
+  <Combine name="${ProjectName}" directory=".">
+    <Options>
+      <StartupProject>${ProjectName}</StartupProject>
+    </Options>
+    <Project name="${ProjectName}" directory="." type="XamarinIOS">
+      <References>
+        <Reference type="Gac" refto="System, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"/>
+        <Reference type="Gac" refto="System.Xml, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"/>
+        <Reference type="Gac" refto="System.Core, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"/>
+        <Reference type="Gac" refto="Xamarin.iOS"/>
+      </References>
+      <Files>
+        <File name="Program.cs" AddStandardHeader="True"><![CDATA[
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Foundation;
+using UIKit;
+using System.Drawing;
+using CoreGraphics;
+
+namespace SingleFileSolution
+{
+    public class ContentView : UIView
+    {
+        public ContentView (UIColor fillColor)
+        {
+            BackgroundColor = fillColor;
+        }
+    }
+
+    public class SimpleViewController : UIViewController
+    {
+        public SimpleViewController () : base ()
+        {
+        }
+
+        public override void DidReceiveMemoryWarning ()
+        {
+            // Releases the view if it doesn't have a superview.
+            base.DidReceiveMemoryWarning ();
+        }
+
+        public override void ViewDidLoad ()
+        {
+            base.ViewDidLoad ();
+
+            var view = new ContentView (UIColor.Blue);
+
+            this.View = view;
+        }
+    }   
+
+    [Register ("AppDelegate")]
+    public  class AppDelegate : UIApplicationDelegate
+    {
+        UIWindow window;
+        SimpleViewController viewController;
+
+        public override bool FinishedLaunching (UIApplication app, NSDictionary options)
+        {
+            window = new UIWindow (UIScreen.MainScreen.Bounds);
+
+            viewController = new SimpleViewController ();
+            window.RootViewController = viewController;
+
+            window.MakeKeyAndVisible ();
+
+            return true;
+        }
+    }
+
+    public class Application
+    {
+        static void Main (string[] args)
+        {
+            UIApplication.Main (args, null, "AppDelegate");
+        }
+    }
+}
+]]></File>
+        <File name="Entitlements.plist" AddStandardHeader="false"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+</dict>
+</plist>
+          
+        ]]></File>
+      </Files>
+    </Project>
+  </Combine>
+</Template>

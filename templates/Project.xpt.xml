@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<Template Created="07/29/2013" LastModified="07/29/2013">
+
+  <!-- Template Header -->
+  <TemplateConfiguration>
+        <_Name>F# Single File</_Name>
+        <_Category>ios/app/general</_Category>
+        <Icon>md-project-iphone</Icon>
+        <Image id="md-ios-empty-project"/>
+        <LanguageName>F#</LanguageName>
+          <DefaultParameters>MinimumOSVersion=8.0, ShowTestCloudOption=false</DefaultParameters>
+        <_Description><![CDATA[WTF.]]></_Description>
+    </TemplateConfiguration>
+
+  <!-- Actions -->
+  <Actions>
+    <Open filename = "Program.fs"/>
+  </Actions>
+
+  <!-- Template Content -->
+  <Combine name = "${ProjectName}" directory = ".">
+    <Options>
+      <StartupProject>${ProjectName}</StartupProject>
+    </Options>
+
+    <Project name = "${ProjectName}" directory = "." type="XamarinIOS">
+      <References>
+			<Reference type="Gac" refto="System, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" />
+				<Reference type="Gac" refto="System.Xml, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" />
+				<Reference type="Gac" refto="System.Core, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" />
+				<Reference type="Gac" refto="monotouch" />
+	      </References>
+      <Files>
+        <File name = "Program.fs" AddStandardHeader="True"><![CDATA[
+namespace Simple
+ 
+open System
+open MonoTouch.UIKit
+open MonoTouch.Foundation
+open System.Drawing
+ 
+type ContentView ( color : UIColor ) as self = 
+    inherit UIView ()
+    do
+        self.BackgroundColor <- color
+ 
+type SimpleController ( ) =
+    inherit UIViewController ()
+ 
+    override this.ViewDidLoad () = 
+        this.View <- new ContentView(UIColor.Blue)
+ 
+[<Register ("AppDelegate")>]
+type AppDelegate () =
+    inherit UIApplicationDelegate ()
+ 
+    let window = new UIWindow (UIScreen.MainScreen.Bounds)
+ 
+    // This method is invoked when the application is ready to run.
+    override this.FinishedLaunching (app, options) =
+        let viewController = new SimpleController()
+        viewController.Title <- "F# Rocks"
+ 
+        let navController = new UINavigationController(viewController)
+        window.RootViewController <- navController
+        window.MakeKeyAndVisible ()
+        true
+ 
+module Main =
+    [<EntryPoint>]
+    let main args =
+        UIApplication.Main (args, null, "AppDelegate")
+        0
+]]></File>
+        <File name="Entitlements.plist" AddStandardHeader="false"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+</dict>
+</plist>
+          
+        ]]></File>
+      </Files>
+    </Project>
+  </Combine>
+</Template>

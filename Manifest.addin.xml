@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Addin namespace="MonoDevelop" id="SingleFileFSharp.iOS" name="iOS Single-File F# Solution" author="Larry OBrien" copyright="(c) 2014-2016 Larry OBrien" description="A Xamarin.iOS Solution defined in a single .fs file" category="Project Types" version="2.0.4">
+	<Runtime>
+		<!---iOS files -->
+		<Import file="templates/Project.xpt.xml"/>
+	</Runtime>
+	<!--- Common dependencies -->
+	<Dependencies>
+		<Addin id="Core" version="6.0"/>
+		<Addin id="Ide" version="6.0"/>
+	</Dependencies>
+	<Module>
+		<Extension path="/MonoDevelop/Ide/ProjectTemplates">
+			<ProjectTemplate id="SingleFileFSharpiOS" file="templates/Project.xpt.xml"/>
+		</Extension>
+	</Module>
+</Addin>

@@ -37,7 +37,7 @@ using UIKit;
 using System.Drawing;
 using CoreGraphics;
 
-namespace SingleFileSolution
+namespace ${ProjectName}
 {
     public class ContentView : UIView
     {

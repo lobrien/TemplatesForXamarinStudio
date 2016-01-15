@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<Template Created="07/29/2013" LastModified="07/29/2013">
+  <!-- Template Header -->
+  <TemplateConfiguration>
+    <_Name>C# Single File Table-Based App</_Name>
+    <_Category>ios/app/general</_Category>
+    <Icon>md-project-iphone</Icon>
+    <Image id="md-ios-empty-project"/>
+    <LanguageName>C#</LanguageName>
+    <DefaultParameters>MinimumOSVersion=8.0, ShowTestCloudOption=false</DefaultParameters>
+    <_Description><![CDATA[Single File Xamarin.iOS app. UI created in code.]]></_Description>
+  </TemplateConfiguration>
+  <!-- Actions -->
+  <Actions>
+    <Open filename="Program.cs"/>
+  </Actions>
+  <!-- Template Content -->
+  <Combine name="${ProjectName}" directory=".">
+    <Options>
+      <StartupProject>${ProjectName}</StartupProject>
+    </Options>
+    <Project name="${ProjectName}" directory="." type="XamarinIOS">
+      <References>
+        <Reference type="Gac" refto="System, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"/>
+        <Reference type="Gac" refto="System.Xml, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"/>
+        <Reference type="Gac" refto="System.Core, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"/>
+        <Reference type="Gac" refto="Xamarin.iOS"/>
+      </References>
+      <Files>
+        <File name="Program.cs" AddStandardHeader="True"><![CDATA[
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Foundation;
+using UIKit;
+using System.Drawing;
+
+namespace ${ProjectName}
+{
+    //Model
+    public class DomainClass
+    {
+        static Random rand = new Random(0);
+
+        public UIColor Color { get; protected set; }
+
+        public float Height { get; protected set; }
+
+        static UIColor[] Colors = new UIColor[] {
+            UIColor.Red,
+            UIColor.Green,
+            UIColor.Blue,
+            UIColor.Yellow
+        };
+
+        public DomainClass()
+        {
+            Color = Colors[rand.Next(Colors.Length)];
+            switch(rand.Next(3))
+            {
+                case 0: 
+                    Height = 24.0f;
+                    break;
+                case 1: 
+                    Height = 44.0f;
+                    break;
+                case 2: 
+                    Height = 64.0f;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[DomainClass: Color={0}, Height={1}]", Color, Height);
+        }
+    }
+
+    public class ClashySource : UITableViewDataSource
+    {
+        public override nint RowsInSection(UITableView tableView, nint section)
+        {
+            return 2;
+        }
+
+        public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+        {
+            var cell = tableView.DequeueReusableCell(ColoredTableCell.ID, indexPath);
+            cell.ContentView.BackgroundColor = UIColor.Orange;
+            return cell;
+        }
+
+        public override nint NumberOfSections(UITableView tableView)
+        {
+            return 1;
+        }
+    }
+    //Table Source
+    public class ColorTableDataSource : UITableViewSource
+    {
+        List<DomainClass> Model { get; set; }
+
+        public ColorTableDataSource(List<DomainClass> model)
+        {
+            this.Model = model;
+        }
+
+        public override nint RowsInSection(UITableView tableView, nint section)
+        {
+            return 10000;
+        }
+
+        public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+        {
+            var cell = tableView.DequeueReusableCell(ColoredTableCell.ID, indexPath);
+            cell.ContentView.BackgroundColor = Model[indexPath.Row % Model.Count].Color;
+
+            return cell;
+        }
+
+        public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
+        {
+
+            //var height = Model[indexPath.Row % Model.Count].Height;
+            //return height;
+            return 44.0f;
+        }
+
+        public override void CellDisplayingEnded(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
+        {
+            Console.WriteLine("CellDisplayingEnded on {0}", indexPath);
+        }
+    }
+
+    public class ColoredTableCell : UITableViewCell
+    {
+        public static readonly NSString ID = new NSString("ColoredTableCell");
+        public static int ClassCount = 0;
+        public int myId = 0;
+
+        public ColoredTableCell()
+        {
+        }
+
+        public ColoredTableCell(IntPtr handle) : base(handle)
+        {
+            Console.WriteLine("New ColoredTableCell allocated {0} {1}", handle.ToInt64(), ClassCount++);
+            myId = handle.ToInt32();
+        }
+
+        ~ColoredTableCell()
+        {
+            Console.WriteLine("ColoredTableCell {0} being finalized.", myId);
+        }
+    }
+
+    public class ColorTableController : UITableViewController
+    {
+        String title;
+
+        public ColorTableController(String title, UITableViewSource source) : base()
+        {
+            this.title = title;
+            //this.TableView.DataSource = source;
+            this.TableView.Source = source;
+
+            this.TableView.RegisterClassForCellReuse(typeof(ColoredTableCell), ColoredTableCell.ID);
+            this.TableView.TableHeaderView = new UIView(new RectangleF(0, 0, 500, 200));
+            this.TableView.TableHeaderView.BackgroundColor = UIColor.Brown;
+
+        }
+
+        public override void DidReceiveMemoryWarning()
+        {
+            // Releases the view if it doesn't have a superview.
+            base.DidReceiveMemoryWarning();
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
+            Title = title;
+
+            //            TableView.SelectRow(NSIndexPath.FromRowSection(1, 0), false, UITableViewScrollPosition.None);
+            //            TableView.SelectRow(NSIndexPath.FromRowSection(1, 1), false, UITableViewScrollPosition.None);
+            //
+            //            TableView.SelectRow(NSIndexPath.FromRowSection(3, 0), false, UITableViewScrollPosition.None);
+            //
+
+            var c = TableView.SectionIndexTrackingBackgroundColor;
+            Console.WriteLine(c);
+        }
+    }
+
+    [Register("AppDelegate")]
+    public  class AppDelegate : UIApplicationDelegate
+    {
+        UIWindow window;
+        ColorTableController viewController;
+
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        {
+            var models = new List<DomainClass>();
+            for(int i = 0; i < 200; i++)
+            {
+                models.Add(new DomainClass());
+            }
+
+            foreach(var m in models)
+            {
+                Console.WriteLine(m);
+            }
+
+            var tableController = new ColorTableController("My Table", new ColorTableDataSource(models));
+            var tabBar = new UITabBarController();
+            var navController = new UINavigationController(tableController);
+            tabBar.ViewControllers = new UIViewController[] { navController };
+
+            var dict = new NSMutableDictionary();
+            dict["navBar"] = NSObject.FromObject(tableController.TopLayoutGuide);
+            dict["table"] = tableController.View;
+
+            //var topConstraint = NSLayoutConstraint.FromVisualFormat("V:[navBar][table]", 0, new NSDictionary(), dict);
+            //tabBar.View.AddConstraints(topConstraint);
+
+            window = new UIWindow(UIScreen.MainScreen.Bounds);
+            window.RootViewController = tabBar;
+
+            window.MakeKeyAndVisible();
+
+            return true;
+        }
+    }
+
+    public class Application
+    {
+        static void Main(string[] args)
+        {
+            UIApplication.Main(args, null, "AppDelegate");
+        }
+    }
+}
+
+
+]]></File>
+        <File name="Entitlements.plist" AddStandardHeader="false"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+</dict>
+</plist>
+          
+        ]]></File>
+      </Files>
+    </Project>
+  </Combine>
+</Template>

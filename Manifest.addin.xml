@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Addin namespace="MonoDevelop" id="LarrysFSharpTemplates.iOS" name="Larry's F# Templates" author="Larry OBrien" copyright="(c) 2014-2016 Larry OBrien" description="F# Templates for Exploring Xamarin.iOS" category="Project Types" version="2.0.7">
+<Addin namespace="MonoDevelop" id="LarrysFSharpTemplates.iOS" name="Larry's F# Templates" author="Larry OBrien" copyright="(c) 2014-2016 Larry OBrien" description="F# Templates for Exploring Xamarin.iOS" category="Project Types" version="2.0.8">
 	<Runtime>
 		<!---iOS files -->
 		<Import file="templates/F#/SingleFileiOS.xpt.xml"/>
 		<Import file="templates/C#/SingleFileiOS.xpt.xml"/>
+		<Import file="templates/C#/TableiOS.xpt.xml"/>
 		
 	</Runtime>
 	<!--- Common dependencies -->
@@ -17,6 +18,9 @@
 		</Extension>
 		<Extension path="/MonoDevelop/Ide/ProjectTemplates">
 			<ProjectTemplate id="SingleFileCSharpiOS" file="templates/C#/SingleFileiOS.xpt.xml"/>
+		</Extension>
+		<Extension path="/MonoDevelop/Ide/ProjectTemplates">
+			<ProjectTemplate id="SingleFileTableCSharpiOS" file="templates/C#/TableiOS.xpt.xml"/>
 		</Extension>
 	</Module>
 </Addin>
